@@ -1,0 +1,29 @@
+{"catalogue":[
+{
+    "artist":"Alvaro Lopez & Res-Q Band",
+    "songs":[
+        {
+        "songName":"Gracias",
+        "url":"M7MJWdav",
+        "instruments":[
+            {"instrument":"Lead","url":"6158610/s/ORD2bo"},
+            {"instrument":"Full Score","url":"6157028/s/5bCPl4"},
+            {"instrument":"Brass","url":"6157054/s/5EqXEf"},
+            {"instrument":"Piano","url":"6157062/s/AsFGE1"},
+            {"instrument":"Bass","url":"6157045/s/zlNamc"}
+        ]}
+    ]
+},
+{
+    "artist":"Juan Luis Guerra",
+    "songs":[
+        {
+        "songName":"Bachata Rosa",
+        "url":"FMfUE5kg",
+        "instruments":[
+            {"instrument":"Lead","url":"6162411/s/7J_SrM"}
+        ]}
+    ]
+}
+    
+]}

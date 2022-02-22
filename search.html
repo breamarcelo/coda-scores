@@ -1,0 +1,160 @@
+<head>
+<style>
+    body {
+    margin: 0;
+    padding: 0;
+    }
+    .search {
+        width: auto;
+        position: relative;
+    }
+    input {
+        -webkit-appearance: none;
+        border-radius: 0;
+        width: 190px;
+        padding: 10px;
+        border: none;
+    }
+    .search-list {
+        position: absolute;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .searchItem {
+        display: none;
+        align-items: center;
+        justify-content: left;
+        margin: 0;
+        background-color: rgb(22, 150, 163);
+    }
+    .searchItem>a {
+        width: 225px;
+        text-decoration: none;
+        color: white;
+        padding: 10px;
+        margin: 0;
+        height: auto;
+        font-weight: 600;
+    }
+    .searchItem>a:hover {
+        background-color: rgb(67, 181, 164);
+    }
+    .inputcontainer {
+        display: flex;
+    }
+    .searchImg {
+        background-color: rgb(22, 150, 163);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+    }
+    .searchImg>img {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        margin: 0;
+    }
+    .song-name {
+        font-weight: 300;
+    }
+</style>
+</head>
+<body>
+    <div class="search">
+        <div class="inputcontainer">
+            <input type="text" id="filterInput">
+            <div class="searchImg">
+                <img src="searchg.svg">
+            </div>
+        </div>
+        <ul id="items" class="search-list">
+        </ul>
+    </div>
+
+<script>
+let filterInput = document.getElementById('filterInput');
+let list = document.getElementById('items');
+
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+    if(this.readyState == 4 && this.status == 200) {
+        let doc = JSON.parse(this.responseText);
+
+        // sort artist
+        doc.catalogue.sort(function(a,b){
+            if (a.artist > b.artist){
+                return 1;
+            }
+            if (a.artist < b.artist) {
+                return -1;
+            }
+            return 0;
+        });
+
+        //sort songs
+        doc.catalogue.forEach(item => {
+            item.songs.forEach(element => {
+                item.songs.sort(function(a,b){
+                    if(a.songName > b.songName){
+                        return 1;
+                    }
+                    if(a.songName < b.songName){
+                        return -1;
+                    }
+                    return 0;
+                });
+            });
+        });
+
+        // create elements
+        doc.catalogue.forEach(item => {
+            item.songs.forEach(items => {
+                let artist = document.createElement('li');
+                artist.classList.add('searchItem');
+                let artistLink = document.createElement('a');
+                let artistName = document.createTextNode(item.artist);
+                let url = document.createAttribute('href');
+                url.value = 'index.php?page=page1&url=' + items.url + '&part=' + items.instruments[0].url;
+                artistLink.setAttributeNode(url);
+                let line = document.createElement('br');
+                let song = document.createElement('span');
+                song.classList.add('song-name')
+                let songName = document.createTextNode(items.songName);
+
+                artistLink.appendChild(artistName);
+                artistLink.appendChild(line);
+                song.appendChild(songName);
+                artistLink.appendChild(song);
+
+                artist.appendChild(artistLink);
+                list.appendChild(artist);
+            })
+        })
+    }
+};
+xhttp.open("GET", "list.json", true);
+xhttp.send();
+
+filterInput.addEventListener('keyup', filterItems);
+
+function filterItems() {
+  let filterValue = filterInput.value.toUpperCase();
+  let ul = document.getElementById('items');
+  let li = ul.querySelectorAll('li.searchItem');
+
+  for (let i = 0; i < li.length; i++) {
+    let a = li[i].getElementsByTagName('a')[0];
+    if (filterValue == '') {
+      ul.style.display = 'none';
+    } else if (a.innerHTML.toUpperCase().indexOf(filterValue) > -1) {
+      ul.style.display = 'block';
+      li[i].style.display = 'flex';
+    } else {
+      li[i].style.display = 'none';
+    }   
+  }
+}
+</script>
+</body>
